@@ -1,31 +1,106 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <title>Ember Starter Kit</title>
-  <link rel="stylesheet" href="css/normalize.css">
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css">
+    <meta charset="utf-8">
+    <title>Ember Starter Kit</title>
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css">
 </head>
 <body>
-  <script type="text/x-handlebars">
+<script type="text/x-handlebars">
     <div class="navbar">
         <div class="navbar-inner">
             <a class="brand" href="#">Bloggr</a>
             <ul class="nav">
-                <li><a href="#">Posts</a></li>
-                <li><a>About</a></li>
+                <li>{{#link-to 'posts'}}Posts{{/link-to}}</li>
+                <li>{{#link-to 'about'}}About{{/link-to}}</li>
             </ul>
         </div>
     </div>
-  </script>
+    {{outlet}}
 
-  <script src="js/libs/jquery-1.10.2.js"></script>
-  <script src="js/libs/handlebars-1.1.2.js"></script>
-  <script src="js/libs/ember-1.6.1.js"></script>
-  <script href="http://cdnjs.cloudflare.com/ajax/libs/showdown/0.3.1/showdown.min.js"></script>
-  <script href="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.1.0/moment.min.js"></script>
-  <script src="js/app.js"></script>
-  <script src="tests/runner.js"></script>
+</script>
+
+<script type="text/x-handlebars" id="posts">
+    <div class="ccntainer-fluid">
+        <div class="row-fluid">
+            <div class="span3">
+                <table class="table">
+                    <thead>
+                        <tr><th>Recent posts</th></tr>
+                    </thead>
+                    {{#each}}
+                        <tr><td>
+                        {{#link-to 'post' this}}
+                            {{{title}}} <small class="muted"> by {{author.name}}</small>
+                        {{/link-to}}
+                        </td></tr>
+                    {{/each}}
+                </table>
+           </div>
+           <div class="span9">
+                {{outlet}}
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/x-handlebars" id="post">
+    {{#if isEditing}}
+        {{partial 'post/edit'}}
+        <button {{action 'doneEditing'}}> Done </button>
+    {{else}}
+        <button {{action 'edit'}}> Edit </button>
+    {{/if}}
+
+    <h1>{{title}}</h1>
+    <h2>by {{author.name}} <small class="muted">{{format-date date}} </small></h2>
+    <hr>
+    <div class="intro">
+        {{format-markdown excerpt}}
+    </div>
+    <div class="below-the-fold">
+        {{format-markdown body}}
+    </div>
+</script>
+
+<script type="text/x-handlebars" id="post/_edit">
+<p> {{input type="text" value=title}}</p>
+<p> {{input type="text" value=excerpt}}</p>
+<p> {{textarea value=body}}</p>
+
+</script>
+
+<script type="text/x-handlebars" id="about">
+      <div class="about">
+    <p>
+    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's
+    standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a
+    type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting,
+    remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing
+    Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of
+    Lorem Ipsum.
+    </p>
+    <p>
+    Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin
+    literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney
+    College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and
+    going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes
+    from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero,
+    written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first
+    line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
+    </p>
+      </div>
+
+</script>
+
+<script src="js/libs/jquery-1.10.2.js"></script>
+<script src="js/libs/handlebars-1.1.2.js"></script>
+<script src="js/libs/ember-1.6.1.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/showdown/0.3.1/showdown.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.1.0/moment.min.js"></script>
+<script src="js/app.js"></script>
+<script src="tests/runner.js"></script>
 </body>
 </html>
